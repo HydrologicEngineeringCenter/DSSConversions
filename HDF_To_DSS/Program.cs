@@ -57,7 +57,7 @@ namespace HDF_To_DSS
 
                 //string dssPath = BuildDssPath(dsn,binPath)
                 string F = "C:" + startLifeCycleNumber.ToString().PadLeft(6, '0') + "|swg";
-                string parameter = "Precipitation";
+                string parameter = "PRECIP-INC";
                 string units = "inches";
                 string dataType = "PER-CUM";
                 if (dsn.ToLower().Contains("temperature"))
