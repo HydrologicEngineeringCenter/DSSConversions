@@ -19,17 +19,16 @@ namespace HDF_To_DSS
 
     static void Main(string[] args)
     {
-      /*if(  args.Length != 4)
+      if(  args.Length != 2)
       {
-        Console.WriteLine("Usage:hdf_to_dss.exe file.h5 StartDateTime interval output.dss");
-        Console.WriteLine("example:hdf_to_dss.exe file.h5 \"1-1-2000 1:00 am\"  1Hour  output.dss");
+        Console.WriteLine("Usage:hdf_to_dss.exe input.hdf  output.dss");
         return;
       }
-      */
+      
       string interval = "1Hour";
       DateTime t = DateTime.Parse("1-1-2000 1:00 am");
-      string fnDss = "a.dss";
-      string fnHDF = @"C:\project\HDF_To_DSS\HDF_To_DSS\SampleData100Years.wg";
+      string fnDss = args[1];
+      string fnHDF = args[0]; //@"C:\project\HDF_To_DSS\HDF_To_DSS\SampleData100Years.wg";
       Stopwatch sW = new Stopwatch();
       sW.Start();
       //add dss 6 example   
