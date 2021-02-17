@@ -12,9 +12,11 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,8 +36,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HDF5DotNet, Version=1.8.9.0, Culture=neutral, PublicKeyToken=a4952c8df86d6e8c, processorArchitecture=AMD64">
-      <HintPath>packages\HDF5DotNet.x64.1.8.9\lib\Net40\HDF5DotNet.dll</HintPath>
+    <Reference Include="H5Assist">
+      <HintPath>assembly\H5Assist.dll</HintPath>
+    </Reference>
+    <Reference Include="Hec.Dss, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Hec.Dss.1.0.26.17\lib\net472\Hec.Dss.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -55,6 +61,14 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /s /y "$(SolutionDir)packages\HDF5DotNet.x64.1.8.9\NativeBinaries\*.*" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
+  <Import Project="packages\Hec.Dss.1.0.26.17\build\Hec.Dss.targets" Condition="Exists('packages\Hec.Dss.1.0.26.17\build\Hec.Dss.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Hec.Dss.1.0.26.17\build\Hec.Dss.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Hec.Dss.1.0.26.17\build\Hec.Dss.targets'))" />
+  </Target>
 </Project>

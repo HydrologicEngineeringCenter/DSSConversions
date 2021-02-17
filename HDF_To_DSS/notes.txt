@@ -1,0 +1,30 @@
+input: hdf file
+output: dss file
+
+creating DSS file for stochastic data import
+
+
+HDF file organized by realization and bins
+
+realization1/bin1   -> c:|000001    (a,b,c varying     precip and temperature)
+realization1/bin2   -> c:|000002
+realization1/bin3   -> c:|000003
+...
+realization1/bin20  -> c:|000020
+
+...
+
+realization2/bin1   -> c:|000021
+realization2/bin2   -> c:|000022
+realization2/bin3   -> c:|000023
+...
+realization2/bin3   -> c:|000040
+
+
+realization3/bin1   -> c:|000041
+
+...
+realization1000/bin1
+
+
+
