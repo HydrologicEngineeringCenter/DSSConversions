@@ -1,6 +1,7 @@
 ﻿using H5Assist;
 using Hec.Dss;
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,8 @@ namespace HDF_To_DSS
       DateTime t = DateTime.Parse("1-1-2000 1:00 am");
       string fnDss = "a.dss";
       string fnHDF = @"C:\project\HDF_To_DSS\HDF_To_DSS\SampleData100Years.wg";
+      Stopwatch sW = new Stopwatch();
+      sW.Start();
       //add dss 6 example   
       using (Hec.Dss.DssWriter dss = new Hec.Dss.DssWriter(fnDss)) {
         using (H5Assist.H5Reader h5 = new H5Reader(fnHDF))
@@ -74,6 +77,14 @@ namespace HDF_To_DSS
           }
         }
       }
+      sW.Stop();
+      TimeSpan ts = sW.Elapsed;
+
+        // Format and display the TimeSpan value.
+        string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+            ts.Hours, ts.Minutes, ts.Seconds,
+            ts.Milliseconds / 10);
+        Console.WriteLine("RunTime " + elapsedTime);
 
     }
 
