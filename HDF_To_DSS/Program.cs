@@ -58,14 +58,15 @@ namespace HDF_To_DSS
                 //string dssPath = BuildDssPath(dsn,binPath)
                 string F = "C:" + startLifeCycleNumber.ToString().PadLeft(6, '0') + "|swg";
                 string parameter = "Precipitation";
-                string dssPath = "/trinity/"+ dsn + "/"+parameter+"//" + interval + "/" + F + "/";
                 string units = "inches";
                 string dataType = "PER-CUM";
                 if (dsn.ToLower().Contains("temperature"))
                 {
-                  units = "degrees Fahrenheit";
+                  units = "F";
                   dataType = "PER-AVER";
+                  parameter = "Temperature";
                 }
+                string dssPath = "/Trinity/"+ dsn + "/"+parameter+"//" + interval + "/" + F + "/";
                 WriteToDss(dss, data, dssPath,t,units, dataType);
                 
               }
