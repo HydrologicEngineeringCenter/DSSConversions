@@ -38,7 +38,6 @@ namespace HDF_To_DSS
           var realizations = h5.GetGroupNames(H5Reader.Root); // realization level.
           foreach (var realization in realizations)
           {
-
             int startLifeCycleNumber = (int.Parse(realization.ToLower().Replace("realization", ""))-1) * 20;
             var binNames = h5.GetGroupNames(Path(realization));
             foreach (var bin in binNames)
@@ -49,28 +48,13 @@ namespace HDF_To_DSS
               foreach (var dsn in names)
               {
                 String binPath = Path(realization, bin, dsn);
-                //var tn = h5.GetAttributeNamesAndTypes(binPath);
                 int ndims = h5.GetDatasetNDims(binPath);
                 if (ndims != 1)
                   throw new Exception("Expecting 1D data sets...");
                 h5.ReadDataset(binPath, ref data);
-
                 Console.WriteLine(binPath + " : " + data.Length);
+                WriteToDss(interval, t, dss, startLifeCycleNumber, data, dsn);
 
-                //string dssPath = BuildDssPath(dsn,binPath)
-                string F = "C:" + startLifeCycleNumber.ToString().PadLeft(6, '0') + "|swg";
-                string parameter = "PRECIP-INC";
-                string units = "inches";
-                string dataType = "PER-CUM";
-                if (dsn.ToLower().Contains("temperature"))
-                {
-                  units = "F";
-                  dataType = "PER-AVER";
-                  parameter = "Temperature";
-                }
-                string dssPath = "/Trinity/"+ dsn + "/"+parameter+"//" + interval + "/" + F + "/";
-                WriteToDss(dss, data, dssPath,t,units, dataType);
-                
               }
             }
           }
@@ -85,6 +69,23 @@ namespace HDF_To_DSS
             ts.Milliseconds / 10);
         Console.WriteLine("RunTime " + elapsedTime);
 
+    }
+
+    private static void WriteToDss(string interval, DateTime t, DssWriter dss, int startLifeCycleNumber, float[] data, string dsn)
+    {
+      //string dssPath = BuildDssPath(dsn,binPath)
+      string F = "C:" + startLifeCycleNumber.ToString().PadLeft(6, '0') + "|swg";
+      string parameter = "PRECIP-INC";
+      string units = "inches";
+      string dataType = "PER-CUM";
+      if (dsn.ToLower().Contains("temperature"))
+      {
+        units = "F";
+        dataType = "PER-AVER";
+        parameter = "Temperature";
+      }
+      string dssPath = "/Trinity/" + dsn + "/" + parameter + "//" + interval + "/" + F + "/";
+      WriteToDss(dss, data, dssPath, t, units, dataType);
     }
 
     private static void WriteToDss(DssWriter dss, float[] data, string dssPath,DateTime startTime, string units, string dataType)
