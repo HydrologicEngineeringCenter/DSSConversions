@@ -100,7 +100,16 @@ namespace HDF_To_DSS
         parameter = "Temperature";
       }
       string dssPath = "/Trinity/" + dsn + "/" + parameter + "//" + interval + "/" + F + "/";
-      WriteToDss(dss, data, dssPath, t, units, dataType);
+      try{
+        WriteToDss(dss, data, dssPath, t, units, dataType);
+      }catch(Exception e){
+        try{
+          WriteToDss(dss, data, dssPath, t, units, dataType);
+        }catch(Exception e){
+          Console.WriteLine("Exception " + e.Message + " " + dsspath);
+        }
+      }
+      
     }
 
     private static void WriteToDss(DssWriter dss, float[] data, string dssPath,DateTime startTime, string units, string dataType)
