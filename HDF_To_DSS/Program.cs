@@ -19,9 +19,9 @@ namespace HDF_To_DSS
 
     static void Main(string[] args)
     {
-      if(  args.Length != 2)
+      if(  args.Length < 2 || args.Length > 3)
       {
-        Console.WriteLine("Usage:hdf_to_dss.exe input.hdf  output.dss");
+        Console.WriteLine("Usage:hdf_to_dss.exe input.hdf  output.dss [debug|quiet]");
         return;
       }
       
@@ -32,14 +32,29 @@ namespace HDF_To_DSS
       Stopwatch sW = new Stopwatch();
       sW.Start();
       //add dss 6 example   
-      using (Hec.Dss.DssWriter dss = new Hec.Dss.DssWriter(fnDss)) {
+
+      Hec.Dss.DssWriter dss;
+      if (args.Length == 3 && args[2] == "debug")
+      {
+        dss = new Hec.Dss.DssWriter(fnDss, DssReader.MethodID.MESS_METHOD_GENERAL_ID,
+                                           DssReader.LevelID.MESS_LEVEL_INTERNAL_DIAG_2);
+      }
+      else if(args.Length == 3 && args[2] == "quiet")
+      {
+        dss = new Hec.Dss.DssWriter(fnDss, DssReader.MethodID.MESS_METHOD_GENERAL_ID,
+                                      DssReader.LevelID.MESS_LEVEL_NONE);
+
+      }
+
+      dss = new Hec.Dss.DssWriter(fnDss);
+      using (dss) {
         using (H5Assist.H5Reader h5 = new H5Reader(fnHDF))
         {
-          var realizations = h5.GetGroupNames(H5Reader.Root); // realization level.
-          foreach (var realization in realizations)
-          {
-            int startLifeCycleNumber = (int.Parse(realization.ToLower().Replace("realization", ""))-1) * 20;
-            var binNames = h5.GetGroupNames(Path(realization));
+            var realizations = h5.GetGroupNames(H5Reader.Root); // realization level.
+            foreach (var realization in realizations)
+            {
+              int startLifeCycleNumber = (int.Parse(realization.ToLower().Replace("realization", "")) - 1) * 20;
+              var binNames = h5.GetGroupNames(Path(realization));
             foreach (var bin in binNames)
             {
               startLifeCycleNumber++;
