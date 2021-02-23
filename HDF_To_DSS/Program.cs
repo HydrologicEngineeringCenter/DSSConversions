@@ -101,19 +101,7 @@ namespace HDF_To_DSS
         parameter = "Temperature";
       }
       string dssPath = "/Trinity/" + dsn + "/" + parameter + "//" + interval + "/" + F + "/";
-      try{
-        WriteToDss(dss, data, dssPath, t, units, dataType);
-      }catch(AccessViolationException e){
-        Console.WriteLine("Access Violation Occurred, trying again. " + e.Message);
-        try{
-          WriteToDss(dss, data, dssPath, t, units, dataType);
-        }catch(AccessViolationException e2){
-          File.WriteAllText("WriteExceptions.txt","Exception " + e2.Message + " " + dssPath);
-        }
-      }catch(Exception ex){
-        Console.WriteLine("Exception " + ex.Message + " " + dssPath);
-      }
-      
+      WriteToDss(dss, data, dssPath, t, units, dataType);     
     }
 
     private static void WriteToDss(DssWriter dss, float[] data, string dssPath,DateTime startTime, string units, string dataType)
@@ -122,7 +110,19 @@ namespace HDF_To_DSS
       Array.Copy(data, d, d.Length);
       // insert leap days... copy prev value...
       Hec.Dss.TimeSeries ts = new TimeSeries(dssPath, d, startTime, units, dataType);
-      dss.Write(ts, true);
+      
+      try{
+        dss.Write(ts, true);
+      }catch(AccessViolationException e){
+        Console.WriteLine("Access Violation Occurred, trying again. " + e.Message);
+        try{
+          dss.Write(ts, true);
+        }catch(AccessViolationException e2){
+          File.WriteAllText("WriteExceptions.txt","Exception " + e2.Message + " " + dssPath);
+        }
+      }catch(Exception ex){
+        Console.WriteLine("Exception " + ex.Message + " " + dssPath);
+      }
     }
 
   }
