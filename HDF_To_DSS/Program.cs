@@ -103,12 +103,15 @@ namespace HDF_To_DSS
       string dssPath = "/Trinity/" + dsn + "/" + parameter + "//" + interval + "/" + F + "/";
       try{
         WriteToDss(dss, data, dssPath, t, units, dataType);
-      }catch(Exception e){
+      }catch(AccessViolationException e){
+        Console.WriteLine("Access Violation Occurred, trying again. " + e.Message);
         try{
           WriteToDss(dss, data, dssPath, t, units, dataType);
-        }catch(Exception e2){
-          await File.WriteAllTextAsync("WriteExceptions.txt","Exception " + e2.Message + " " + dssPath);
+        }catch(AccessViolationException e2){
+          File.WriteAllText("WriteExceptions.txt","Exception " + e2.Message + " " + dssPath);
         }
+      }catch(Exception ex){
+        Console.WriteLine("Exception " + ex.Message + " " + dssPath);
       }
       
     }
