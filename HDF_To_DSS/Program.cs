@@ -1,6 +1,7 @@
 ﻿using H5Assist;
 using Hec.Dss;
 using System;
+using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
@@ -106,7 +107,7 @@ namespace HDF_To_DSS
         try{
           WriteToDss(dss, data, dssPath, t, units, dataType);
         }catch(Exception e2){
-          Console.WriteLine("Exception " + e2.Message + " " + dssPath);
+          await File.WriteAllTextAsync("WriteExceptions.txt","Exception " + e2.Message + " " + dssPath);
         }
       }
       
