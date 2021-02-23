@@ -3,11 +3,9 @@ configuration: Release
 platform: Any CPU
 before_build:
 - cmd: >-
-    cd hdf_to_dss
-
     nuget restore
 build:
   verbosity: minimal
 artifacts:
-- path: HDF_To_DSS\bin
+- path: bin
   name: bin
