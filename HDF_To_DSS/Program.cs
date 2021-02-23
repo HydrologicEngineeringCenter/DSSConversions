@@ -105,8 +105,8 @@ namespace HDF_To_DSS
       }catch(Exception e){
         try{
           WriteToDss(dss, data, dssPath, t, units, dataType);
-        }catch(Exception e){
-          Console.WriteLine("Exception " + e.Message + " " + dsspath);
+        }catch(Exception e2){
+          Console.WriteLine("Exception " + e2.Message + " " + dssPath);
         }
       }
       
