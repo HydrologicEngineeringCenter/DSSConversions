@@ -20,12 +20,12 @@ namespace HDF_To_DSS
 
     static void Main(string[] args)
     {
-      if(  args.Length < 2 || args.Length > 3)
+      if (args.Length < 2 || args.Length > 3)
       {
         Console.WriteLine("Usage:hdf_to_dss.exe input.hdf  output.dss [debug|quiet]");
         return;
       }
-      
+
       string interval = "1Hour";
       DateTime t = DateTime.Parse("1-1-2000 1:00 am");
       string fnDss = args[1];
@@ -40,7 +40,7 @@ namespace HDF_To_DSS
         dss = new Hec.Dss.DssWriter(fnDss, DssReader.MethodID.MESS_METHOD_GENERAL_ID,
                                            DssReader.LevelID.MESS_LEVEL_INTERNAL_DIAG_2);
       }
-      else if(args.Length == 3 && args[2] == "quiet")
+      else if (args.Length == 3 && args[2] == "quiet")
       {
         dss = new Hec.Dss.DssWriter(fnDss, DssReader.MethodID.MESS_METHOD_GENERAL_ID,
                                       DssReader.LevelID.MESS_LEVEL_NONE);
@@ -48,14 +48,15 @@ namespace HDF_To_DSS
       }
 
       dss = new Hec.Dss.DssWriter(fnDss);
-      using (dss) {
+      using (dss)
+      {
         using (H5Assist.H5Reader h5 = new H5Reader(fnHDF))
         {
-            var realizations = h5.GetGroupNames(H5Reader.Root); // realization level.
-            foreach (var realization in realizations)
-            {
-              int startLifeCycleNumber = (int.Parse(realization.ToLower().Replace("realization", "")) - 1) * 20;
-              var binNames = h5.GetGroupNames(Path(realization));
+          var realizations = h5.GetGroupNames(H5Reader.Root); // realization level.
+          foreach (var realization in realizations)
+          {
+            int startLifeCycleNumber = (int.Parse(realization.ToLower().Replace("realization", "")) - 1) * 20;
+            var binNames = h5.GetGroupNames(Path(realization));
             foreach (var bin in binNames)
             {
               startLifeCycleNumber++;
@@ -79,11 +80,11 @@ namespace HDF_To_DSS
       sW.Stop();
       TimeSpan ts = sW.Elapsed;
 
-        // Format and display the TimeSpan value.
-        string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-            ts.Hours, ts.Minutes, ts.Seconds,
-            ts.Milliseconds / 10);
-        Console.WriteLine("RunTime " + elapsedTime);
+      // Format and display the TimeSpan value.
+      string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+          ts.Hours, ts.Minutes, ts.Seconds,
+          ts.Milliseconds / 10);
+      Console.WriteLine("RunTime " + elapsedTime);
 
     }
 
@@ -101,29 +102,59 @@ namespace HDF_To_DSS
         parameter = "Temperature";
       }
       string dssPath = "/Trinity/" + dsn + "/" + parameter + "//" + interval + "/" + F + "/";
-      WriteToDss(dss, data, dssPath, t, units, dataType);     
+      WriteToDss(dss, data, dssPath, t, units, dataType);
     }
 
-    private static void WriteToDss(DssWriter dss, float[] data, string dssPath,DateTime startTime, string units, string dataType)
+    private static void WriteToDss(DssWriter dss, float[] data, string dssPath, DateTime startTime, string units, string dataType)
     {
-      double[] d = new double[data.Length];
-      Array.Copy(data, d, d.Length);
-      // insert leap days... copy prev value...
+      double[] d = addLeapDays(data, startTime);
       Hec.Dss.TimeSeries ts = new TimeSeries(dssPath, d, startTime, units, dataType);
-      
-      try{
+
+      try
+      {
         dss.Write(ts, true);
-      }catch(AccessViolationException e){
+      }
+      catch (AccessViolationException e)
+      {
         Console.WriteLine("Access Violation Occurred, trying again. " + e.Message);
-        try{
+        try
+        {
           dss.Write(ts, true);
-        }catch(AccessViolationException e2){
-          File.WriteAllText("WriteExceptions.txt","Exception " + e2.Message + " " + dssPath);
         }
-      }catch(Exception ex){
+        catch (AccessViolationException e2)
+        {
+          File.WriteAllText("WriteExceptions.txt", "Exception " + e2.Message + " " + dssPath);
+        }
+      }
+      catch (Exception ex)
+      {
         Console.WriteLine("Exception " + ex.Message + " " + dssPath);
       }
     }
 
+    private static double[] addLeapDays(float[] inputdata, DateTime inputT)
+    {
+      int totalCount = inputdata.Length;
+      List<double> output = new List<double>(totalCount+24*inputdata.Length/24/364);
+      int nonLeapDayIndex = 0;
+      int leapDayIndex = 0;
+      float defaultValue = 0.0f;
+      DateTime t = inputT;
+      while (nonLeapDayIndex < inputdata.Length)
+      {
+        if (t.Month == 12 && t.Day == 31 && DateTime.IsLeapYear(t.Year))
+        {
+          output[leapDayIndex] = defaultValue;
+          leapDayIndex++;
+        }
+        else
+        {
+          output[leapDayIndex] = inputdata[nonLeapDayIndex];
+          nonLeapDayIndex++;
+        }
+        t = t.AddHours(1);
+      }
+      return output.ToArray();
+    }
   }
 }
