@@ -143,9 +143,28 @@ namespace HDF_To_DSS
       if(mutableT.IsLeapYear){
         //add values for leap day day
         //dayofyear = 60
+        for(int i = 0, i<hoursBeforeLeapDay, i++){
+          output.index(leapDayIndex) = inputdata[nonLeapDayIndex];
+            leapDayIndex ++;
+          nonLeapDayIndex ++;
+        }
+                for(int i = 0, i<24, i++){
+          output.index(leapDayIndex) = defaultValue;
+            leapDayIndex ++;
+        }
+                for(int i = hoursBeforeLeapDay, i<hoursPernonLeapYear, i++){
+          output.index(leapDayIndex) = inputdata[nonLeapDayIndex];
+            leapDayIndex ++;
+          nonLeapDayIndex ++;
+        }
       }else{
         //dont add values for leap day
         //add all of the next hoursPerNonLeapYear values and update indices
+        for(int i = 0, i<hoursPernonLeapYear, i++){
+          output.index(leapDayIndex) = inputdata[nonLeapDayIndex];
+            leapDayIndex ++;
+          nonLeapDayIndex ++;
+        }
       }
       mutableT.AddYears(1);
     }
