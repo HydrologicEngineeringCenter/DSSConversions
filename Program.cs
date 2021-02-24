@@ -134,40 +134,24 @@ namespace HDF_To_DSS
     int leapDayIndex = 0;
     int nonLeapYearDays = 365;
     int hoursPernonLeapYear = nonLeapYearDays*24;
-    int hoursBeforeLeapDay = 60*24;
-    int hoursPerLeapYear = (nonLeapYearDays+1)*24;
     float defaultValue = 0.0f;
     //some sort of loop
     while(nonLeapDayIndex<totalCount){
-      
-      if(mutableT.IsLeapYear){
-        //add values for leap day day
-        //dayofyear = 60
-        for(int i = 0, i<hoursBeforeLeapDay, i++){
+      for(int i = 0, i<hoursPernonLeapYear, i++){
           output.index(leapDayIndex) = inputdata[nonLeapDayIndex];
             leapDayIndex ++;
           nonLeapDayIndex ++;
         }
+      if(mutableT.IsLeapYear){
+        //add values for leap day day at the end of the year (to not break up a storm)
                 for(int i = 0, i<24, i++){
           output.index(leapDayIndex) = defaultValue;
             leapDayIndex ++;
-        }
-                for(int i = hoursBeforeLeapDay, i<hoursPernonLeapYear, i++){
-          output.index(leapDayIndex) = inputdata[nonLeapDayIndex];
-            leapDayIndex ++;
-          nonLeapDayIndex ++;
-        }
-      }else{
-        //dont add values for leap day
-        //add all of the next hoursPerNonLeapYear values and update indices
-        for(int i = 0, i<hoursPernonLeapYear, i++){
-          output.index(leapDayIndex) = inputdata[nonLeapDayIndex];
-            leapDayIndex ++;
-          nonLeapDayIndex ++;
         }
       }
       mutableT.AddYears(1);
     }
     return inputdata;
   }
+}
 }
