@@ -71,7 +71,7 @@ namespace HDF_To_DSS
                 h5.ReadDataset(binPath, ref data);
                 Console.WriteLine(binPath + " : " + data.Length);
                 //add leapdays
-                WriteToDss(interval, t, dss, startLifeCycleNumber, addLeapDays(data,t), dsn);
+                WriteToDss(interval, t, dss, startLifeCycleNumber, data, dsn);
 
               }
             }
@@ -156,7 +156,8 @@ namespace HDF_To_DSS
       return output.ToArray();
     }
   }
-  private static float[] addLeapDays(float[] inputdata, DateTime inputT) {
+  /*
+  private static float[] addLeapDaysv1(float[] inputdata, DateTime inputT) {
     int totalCount = inputdata.Length;
     List<float> output = new List<float>(totalCount);//will need some inserts
     DateTime mutableT = inputT; //it is a struct
@@ -182,6 +183,7 @@ namespace HDF_To_DSS
       mutableT.AddYears(1);
     }
     return inputdata;
-  }
+  }*/
 }
-}
+
+
