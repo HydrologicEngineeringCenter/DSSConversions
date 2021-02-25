@@ -59,7 +59,8 @@ namespace HDF_To_DSS
             var binNames = h5.GetGroupNames(Path(realization));
             foreach (var bin in binNames)
             {
-              startLifeCycleNumber++;
+              int binNum = (int.Parse(bin.ToLower().Replace("bin",""))-1) + startLifecycleNumber;
+              //startLifeCycleNumber++;
               var names = h5.GetDatasetNames(Path(realization, bin));
               float[] data = null;
               foreach (var dsn in names)
@@ -71,7 +72,7 @@ namespace HDF_To_DSS
                 h5.ReadDataset(binPath, ref data);
                 Console.WriteLine(binPath + " : " + data.Length);
                 //add leapdays
-                WriteToDss(interval, t, dss, startLifeCycleNumber, data, dsn);
+                WriteToDss(interval, t, dss, binNum, data, dsn);
 
               }
             }
