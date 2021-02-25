@@ -137,19 +137,17 @@ namespace HDF_To_DSS
       int totalCount = inputdata.Length;
       List<double> output = new List<double>(totalCount + 24 * inputdata.Length / 24 / 364);
       int nonLeapDayIndex = 0;
-      int leapDayIndex = 0;
       float defaultValue = 0.0f;
       DateTime t = inputT;
       while (nonLeapDayIndex < inputdata.Length)
       {
         if (t.Month == 12 && t.Day == 31 && DateTime.IsLeapYear(t.Year))
         {
-          output[leapDayIndex] = defaultValue;
-          leapDayIndex++;
+          output.Add(defaultValue);
         }
         else
         {
-          output[leapDayIndex] = inputdata[nonLeapDayIndex];
+          output.Add(inputdata[nonLeapDayIndex]);
           nonLeapDayIndex++;
         }
         t = t.AddHours(1);
