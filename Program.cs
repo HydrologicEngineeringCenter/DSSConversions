@@ -70,7 +70,8 @@ namespace HDF_To_DSS
                   throw new Exception("Expecting 1D data sets...");
                 h5.ReadDataset(binPath, ref data);
                 Console.WriteLine(binPath + " : " + data.Length);
-                WriteToDss(interval, t, dss, startLifeCycleNumber, data, dsn);
+                //add leapdays
+                WriteToDss(interval, t, dss, startLifeCycleNumber, addLeapDays(data,t), dsn);
 
               }
             }
@@ -155,4 +156,32 @@ namespace HDF_To_DSS
       return output.ToArray();
     }
   }
+  private static float[] addLeapDays(float[] inputdata, DateTime inputT) {
+    int totalCount = inputdata.Length;
+    List<float> output = new List<float>(totalCount);//will need some inserts
+    DateTime mutableT = inputT; //it is a struct
+    int nonLeapDayIndex = 0;
+    int leapDayIndex = 0;
+    int nonLeapYearDays = 365;
+    int hoursPernonLeapYear = nonLeapYearDays*24;
+    float defaultValue = 0.0f;
+    //some sort of loop
+    while(nonLeapDayIndex<totalCount){
+      for(int i = 0, i<hoursPernonLeapYear, i++){
+          output.index(leapDayIndex) = inputdata[nonLeapDayIndex];
+            leapDayIndex ++;
+          nonLeapDayIndex ++;
+        }
+      if(mutableT.IsLeapYear){
+        //add values for leap day day at the end of the year (to not break up a storm)
+                for(int i = 0, i<24, i++){
+          output.index(leapDayIndex) = defaultValue;
+            leapDayIndex ++;
+        }
+      }
+      mutableT.AddYears(1);
+    }
+    return inputdata;
+  }
+}
 }
