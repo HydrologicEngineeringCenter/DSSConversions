@@ -63,16 +63,15 @@ namespace HDF_To_DSS
               //startLifeCycleNumber++;
               var names = h5.GetDatasetNames(Path(realization, bin));
               float[] data = null;
-              foreach (var dsn in names)
+              foreach (var dataSetName in names)
               {
-                String binPath = Path(realization, bin, dsn);
+                String binPath = Path(realization, bin, dataSetName);
                 int ndims = h5.GetDatasetNDims(binPath);
                 if (ndims != 1)
                   throw new Exception("Expecting 1D data sets...");
                 h5.ReadDataset(binPath, ref data);
-                Console.WriteLine(binPath + " : " + data.Length);
-                //add leapdays
-                WriteToDss(interval, t, dss, binNum, data, dsn);
+                Console.Write(binPath + " " + fnHDF + " -> ");
+                WriteToDss(interval, t, dss, binNum, data, dataSetName);
 
               }
             }
@@ -92,8 +91,6 @@ namespace HDF_To_DSS
 
     private static void WriteToDss(string interval, DateTime t, DssWriter dss, int startLifeCycleNumber, float[] data, string dsn)
     {
-      //string dssPath = BuildDssPath(dsn,binPath)
-      string F = "C:" + startLifeCycleNumber.ToString().PadLeft(6, '0') + "|swg";
       string parameter = "PRECIP-INC";
       string units = "inches";
       string dataType = "PER-CUM";
@@ -103,7 +100,9 @@ namespace HDF_To_DSS
         dataType = "PER-AVER";
         parameter = "Temperature";
       }
+      string F = "C:" + startLifeCycleNumber.ToString().PadLeft(6, '0') + "|swg";
       string dssPath = "/Trinity/" + dsn + "/" + parameter + "//" + interval + "/" + F + "/";
+      Console.WriteLine(" "+dssPath + " " +dss.Filename );
       WriteToDss(dss, data, dssPath, t, units, dataType);
     }
 
