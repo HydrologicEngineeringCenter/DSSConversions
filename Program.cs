@@ -59,7 +59,7 @@ namespace HDF_To_DSS
             var binNames = h5.GetGroupNames(Path(realization));
             foreach (var bin in binNames)
             {
-              int binNum = (int.Parse(bin.ToLower().Replace("bin",""))-1) + startLifecycleNumber;
+              int binNum = (int.Parse(bin.ToLower().Replace("bin",""))-1) + startLifeCycleNumber;
               //startLifeCycleNumber++;
               var names = h5.GetDatasetNames(Path(realization, bin));
               float[] data = null;
