@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "HEFS_To_DSS": {
+      "commandName": "Project",
+      "commandLineArgs": "RussianNapa \"2021-04-22 12:00\" \"2021-04-22 12:00\" c:\\temp\\downloads   hefs.dss",
+      "workingDirectory": "c:\\temp"
+    }
+  }
+}
