@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HDF_To_DSS", "HDF_To_DSS\HD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSSToCSV", "DSSToCSV\DSSToCSV.csproj", "{7C09F6DB-337E-4982-9BA4-286EE4F2D68B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HEFS_To_DSS", "HEFS_To_DSS\HEFS_To_DSS.csproj", "{6B65DE51-ACC5-451E-B2B0-C5C82FEAA58A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7C09F6DB-337E-4982-9BA4-286EE4F2D68B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C09F6DB-337E-4982-9BA4-286EE4F2D68B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C09F6DB-337E-4982-9BA4-286EE4F2D68B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B65DE51-ACC5-451E-B2B0-C5C82FEAA58A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B65DE51-ACC5-451E-B2B0-C5C82FEAA58A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B65DE51-ACC5-451E-B2B0-C5C82FEAA58A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B65DE51-ACC5-451E-B2B0-C5C82FEAA58A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
