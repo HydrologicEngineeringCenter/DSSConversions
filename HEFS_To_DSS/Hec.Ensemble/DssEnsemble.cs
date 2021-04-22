@@ -16,7 +16,7 @@ namespace Hec.Ensemble
       bool saveAsFloat = true;
       float[] ensembleMember = null;
       int count = 0;
-      using (var w = new DssWriter(dssFileName, DssReader.MethodID.MESS_METHOD_GLOBAL_ID, DssReader.LevelID.MESS_LEVEL_CRITICAL))
+      using (var w = new DssWriter(dssFileName, DssReader.MethodID.MESS_METHOD_GLOBAL_ID, DssReader.LevelID.MESS_LEVEL_GENERAL))
       {
         foreach (Location loc in watershed.Locations)
         {
