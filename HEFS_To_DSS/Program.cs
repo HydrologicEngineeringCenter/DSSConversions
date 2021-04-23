@@ -34,8 +34,8 @@ namespace HEFS_To_DSS
         t = t.AddDays(1);
       }
 
-      HEFS_WebReader.Read(watershedName, t, csvDir);
-
+      //HEFS_WebReader.Read(watershedName, t, csvDir);
+      //DateTime dt = convertedDate.ToLocalTime();   
       // read csv into memory
       var er = new CsvEnsembleReader(csvDir);
       var ws = er.Read(watershedName, t1, t2);
